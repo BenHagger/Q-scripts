@@ -13,15 +13,16 @@ crossCorr: {[s1; s2] / input two series of the same length
     lag: 1_ (til 2* count s1) - count s1 ; /equivalent to ( linspace(0, len(s2)) - len(s2)  )[1:]   , i.e. generate integer indexes, centre on 0, cut first element
 
         
-        / for s1 and s2, successively apply a cut of each lag to the array. we will have a list of lists containing
-        / s1[0]
-        / s1[0], s1[1]
-        / s1[0], s1[1], s1[2]
-        / ......
-        / s1[n-2], s1[n-1], s1[n]
-        / s1[n-1], s1[n]
-        / s1[n]
+        / for s1 and s2, successively apply a cut of each lag to the array. we will have a list of lists containing for each our original arrays containing 
+        / s1[0]                     *                       s2[n]
+        / s1[0], s1[1]              *              s2[n-1], s2[n]
+        / s1[0], s1[1], s1[2]       *     s2[n], s2[n-1], s2[n-2]
+        / ......                          ............
+        / s1[n-2], s1[n-1], s1[n]   *         s2[0], s2[1], s2[2]
+        / s1[n-1], s1[n]            *                s2[0], s2[1]
+        / s1[n]                     *                       s2[0]
         / this is why we reflected about zero, to inverse the structure of the loop and feed every index into the next transformation in one go .
+        / we are taking the product of the arrays (resulting in pair wise multiplication of the list constituting the array), then summing the resultant pairs of products.
     
     / as we are then computing cross correlation, we are actually just flipping s2, taking the product of the new series, and summing the results (dot product), we then lag (techincally we lag one array and pad, however, why pad with a zero and add a computation when you can simply cut...
     /   _\: takes each element from the lag array and drops from s1. think of it as the inbuilt version of 
